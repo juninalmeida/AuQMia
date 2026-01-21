@@ -25,10 +25,41 @@
 
     <div class="container app">
       <header class="app__header">
-        <h1 class="app__title">
-          <span class="font-serif-premium">AuQMia</span>
-          <span class="app__subtitle">Agenda</span>
-        </h1>
+        <div class="app-header__brand">
+          <div class="brand">
+            <div class="brand__logo" aria-hidden="true">
+              <!-- icone css -->
+            </div>
+            <h1 class="brand__title">
+              <span class="brand__name" font-serif-premium>AuQMia</span>
+              <span class="brand__tagline">Agenda</span>
+            </h1>
+          </div>
+
+          <p class="app-header__date">
+            <span class="icon icon--calendar" aria-hidden="true"></span>
+            <time datetime="2023-11-15">Quarta-feira, 15 de Novembro</time>
+          </p>
+        </div>
+        <div class="app-header__actions">
+          <button
+            class="btn btn--ghost btn-calendar"
+            type="button"
+            data-action="open-calendar"
+          >
+            <span class="icon icon--calendar" aria-hidden="true"></span>
+            <span>Ver Calendário</span>
+          </button>
+
+          <button
+            class="btn btn--primary"
+            type="button"
+            data-action="open-new-appointment"
+          >
+            <span>Novo Agendamento</span>
+            <span class="icon icon--add" aria-hidden="true"></span>
+          </button>
+        </div>
       </header>
 
       <main class="app__preview">

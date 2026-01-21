@@ -8,11 +8,11 @@
 ## Onde paramos
 
 - Bloco atual: 0 — Setup + Global CSS
-- Status: em andamento
+- Status: Validado
 
 ## O que já foi validado (resumo por blocos)
 
-- [ ] Bloco 0 — Bootstrap do repo + tokens/estilos globais
+- [X] Bloco 0 — Bootstrap do repo + tokens/estilos globais
 
 ## Estado (Fonte da Verdade)
 
@@ -44,7 +44,7 @@
 
 ## Bugs / Pendências
 
-- Console: -
+- Console: resolvido parse error import/export (webpack ESM + .babelrc)
 - Comportamento: -
 
 ## Smoke test (manual)
@@ -54,4 +54,4 @@
 
 ## Último commit
 
-- -
+chore: bootstrap (webpack+babel esm) + global tokens
