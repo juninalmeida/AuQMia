@@ -78,5 +78,101 @@
         </button>
       </main>
     </div>
+
+    <div class="overlay" data-overlay hidden>
+      <div
+        class="overlay__backdrop"
+        data-action="close-all"
+        aria-hidden="true"
+      ></div>
+
+      <section
+        id="modal-calendar"
+        class="modal modal--calendar"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-calendar-title"
+        aria-hidden="true"
+        data-modal="calendar"
+        hidden
+      >
+        <header class="modal__header">
+          <h2 id="modal-calendar-title" class="modal__title">
+            Calendário Mensal
+          </h2>
+
+          <button
+            class="modal__close"
+            type="button"
+            data-action="close-all"
+            aria-label="Fechar"
+          >
+            x
+          </button>
+        </header>
+
+        <div class="modal__body">
+          <!-- bloco html -->
+        </div>
+      </section>
+
+      <section
+        id="modal-new"
+        class="modal modal--new"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-new-title"
+        aria-hidden="true"
+        data-modal="new"
+        hidden
+      >
+        <header class="modal__header">
+          <h2 id="modal-new-title" class="modal__title">Novo Agendamento</h2>
+
+          <button
+            class="modal__close"
+            type="button"
+            data-action="close-all"
+            aria-label="Fechar"
+          >
+            x
+          </button>
+        </header>
+
+        <div class="modal__body">
+          <form class="form" novalidate>
+            <div class="form__field">
+              <label class="form__label" for="petName">Nome do Pet</label>
+              <input
+                class="form__control input-dark"
+                id="petName"
+                name="petName"
+                type="text"
+                placeholder="Ex: Bruce"
+              />
+            </div>
+
+            <div class="form__field">
+              <label class="form__label" for="tutorName">Nome do Tutor</label>
+              <input
+                class="form__control input-dark"
+                id="tutorName"
+                name="tutorName"
+                type="text"
+                placeholder="Ex: Júnior Almeida"
+              />
+            </div>
+
+            <button
+              class="btn btn--primary"
+              type="submit"
+              data-action="submit-appointment"
+            >
+              Confirmar Agendamento
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
   </body>
 </html>
