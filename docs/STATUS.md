@@ -7,12 +7,12 @@
 
 ## Onde paramos
 
-- Bloco atual: 0 — Setup + Global CSS
+- Bloco atual: 2 — Header (CSS)
 - Status: Validado
 
 ## O que já foi validado (resumo por blocos)
 
-- [X] Bloco 0 — Bootstrap do repo + tokens/estilos globais
+ - [x] Bloco 2 — Header (CSS responsivo + calendário desktop/mobile)
 
 ## Estado (Fonte da Verdade)
 
@@ -24,11 +24,9 @@
 
 ## Arquivos principais tocados (no bloco atual)
 
-- webpack.config.js — pipeline dev/prod
-- src/styles/global.css — tokens + reset + componentes globais
-- src/js/main.js — entrypoint
-- src/js/state/state.js — state stub
-- docs/STATUS.md — progresso
+- src/styles/app.css — agregador de imports
+- src/styles/sections/header.css — layout do header
+- src/index.html — CTA calendário mobile
 
 ## Decisões (as 3 mais importantes)
 
@@ -54,4 +52,4 @@
 
 ## Último commit
 
-chore: bootstrap (webpack+babel esm) + global tokens
+- feat: header css (mobile centralizado + calendário por breakpoint)

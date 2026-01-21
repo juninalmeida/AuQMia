@@ -24,14 +24,14 @@
     <div id="particles-js" aria-hidden="true"></div>
 
     <div class="container app">
-      <header class="app__header">
+      <header class="app-header">
         <div class="app-header__brand">
           <div class="brand">
             <div class="brand__logo" aria-hidden="true">
               <!-- icone css -->
             </div>
             <h1 class="brand__title">
-              <span class="brand__name" font-serif-premium>AuQMia</span>
+              <span class="brand__name font-serif-premium">AuQMia</span>
               <span class="brand__tagline">Agenda</span>
             </h1>
           </div>
@@ -43,12 +43,12 @@
         </div>
         <div class="app-header__actions">
           <button
-            class="btn btn--ghost btn-calendar"
+            class="btn btn--ghost btn--calendar-desktop"
             type="button"
             data-action="open-calendar"
           >
             <span class="icon icon--calendar" aria-hidden="true"></span>
-            <span>Ver Calendário</span>
+            <span>Ver Calendário </span>
           </button>
 
           <button
@@ -67,6 +67,15 @@
           <p>Preview card (dog)</p>
           <input class="input-dark preview-input" placeholder="Preview input" />
         </article>
+
+        <button
+          class="btn btn--calendar-mobile"
+          type="button"
+          data-action="open-calendar"
+        >
+          <span class="icon icon--calendar" aria-hidden="true"></span>
+          <span>Ver Calendário Completo</span>
+        </button>
       </main>
     </div>
   </body>

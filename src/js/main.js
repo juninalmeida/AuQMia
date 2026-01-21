@@ -1,4 +1,4 @@
-import "../styles/global.css";
+import "../styles/app.css";
 
 import { state } from "./state/state.js";
 
