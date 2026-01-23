@@ -7,12 +7,12 @@
 
 ## Onde paramos
 
-- Bloco atual: 8 — Calendário (JS)
+- Bloco atual: 9 — Grid Diário (HTML)
 - Status: Validado
 
 ## O que já foi validado (resumo por blocos)
 
-- [x] Bloco 8 — Calendário (JS: month grid via state + prev/next + select)
+- [x] Bloco 9 — Grid Diário (HTML: manhã/tarde/noite + data-slot)
 
 ## Estado (Fonte da Verdade)
 
@@ -20,10 +20,7 @@
 
 ## Arquivos principais tocados (no bloco atual)
 
-- src/utils/calendar.js — cálculo puro do grid
-- src/js/features/calendar/calendar.js — reducer/render/eventos
-- src/js/state/state.js — calendar no estado inicial
-- src/js/main.js — initCalendar
+- src/index.html — estrutura do grid diário
 
 ## Decisões (as 3 mais importantes)
 
@@ -39,6 +36,11 @@
 - 4.
 - 5.
 - 6.
+- 7.
+- 8.
+- 9.
+- Bloco 10 — Grid Diário (CSS)
+- Bloco 11 — Agendamentos (JS: form → state → render cards + dots)
 
 ## Bugs / Pendências
 
