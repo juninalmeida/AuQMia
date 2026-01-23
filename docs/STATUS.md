@@ -7,21 +7,23 @@
 
 ## Onde paramos
 
-- Bloco atual: 7 — Calendário (CSS)
+- Bloco atual: 8 — Calendário (JS)
 - Status: Validado
 
 ## O que já foi validado (resumo por blocos)
 
- - [x] Bloco 7 — Calendário (CSS: grid 7 colunas + estados + legenda)
+- [x] Bloco 8 — Calendário (JS: month grid via state + prev/next + select)
 
 ## Estado (Fonte da Verdade)
 
-- state.ui.modals controla visibilidade; DOM reflete via hidden/aria/data-open
+- state.ui.calendar = { year, month, selectedDateISO }
 
 ## Arquivos principais tocados (no bloco atual)
 
-- src/styles/app.css — import calendar.css
-- src/styles/sections/calendar.css — estilos do calendário
+- src/utils/calendar.js — cálculo puro do grid
+- src/js/features/calendar/calendar.js — reducer/render/eventos
+- src/js/state/state.js — calendar no estado inicial
+- src/js/main.js — initCalendar
 
 ## Decisões (as 3 mais importantes)
 
@@ -32,11 +34,12 @@
 ## Próximos passos (3 itens)
 
 - 1.
-- 2. 
-- 3. 
+- 2.
+- 3.
 - 4.
 - 5.
 - 6.
+
 ## Bugs / Pendências
 
 - Console: resolvido parse error import/export (webpack ESM + .babelrc)
@@ -49,4 +52,4 @@
 
 ## Último commit
 
-- feat: estilos do calendario (grid + estados + legenda)
+- feat: calendario via estado (render mes + navegar + selecionar)

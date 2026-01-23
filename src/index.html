@@ -63,10 +63,46 @@
       </header>
 
       <main class="app__preview">
-        <article class="glass-card neon-dog preview-card">
-          <p>Preview card (dog)</p>
-          <input class="input-dark preview-input" placeholder="Preview input" />
-        </article>
+        <section class="day-grid" aria-label="Agenda do dia">
+          <section class="day-period day-period--morning" aria-label="Manhã">
+            <header class="day-period__header">
+              <span class="day-period__icon" aria-hidden="true"></span>
+              <h2 class="day-period__title">Manhã</h2>
+            </header>
+
+            <ul
+              class="day-period__list"
+              data-slot="morning"
+              aria-label="Agendamentos da manhã"
+            ></ul>
+          </section>
+
+          <section class="day-period day-period--afternoon" aria-label="Tarde">
+            <header class="day-period__header">
+              <span class="day-period__icon" aria-hidden="true"></span>
+              <h2 class="day-period__title">Tarde</h2>
+            </header>
+
+            <ul
+              class="day-period__list"
+              data-slot="afternoon"
+              aria-label="Agendamentos da tarde"
+            ></ul>
+          </section>
+
+          <section class="day-period day-period--night" aria-label="Noite">
+            <header class="day-period__header">
+              <span class="day-period__icon" aria-hidden="true"></span>
+              <h2 class="day-period__title">Noite</h2>
+            </header>
+
+            <ul
+              class="day-period__list"
+              data-slot="night"
+              aria-label="Agendamentos da noite"
+            ></ul>
+          </section>
+        </section>
 
         <button
           class="btn btn--calendar-mobile"
