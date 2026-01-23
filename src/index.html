@@ -112,7 +112,75 @@
         </header>
 
         <div class="modal__body">
-          <!-- bloco html -->
+          <div class="calendar" aria-label="Calendário mensal">
+            <header class="calendar__toolbar">
+              <p class="calendar__meta">
+                <span class="calendar__month" data-calendar-month
+                  >Novembro</span
+                >
+                <span class="calendar__year" data-calendar-year>2026</span>
+              </p>
+
+              <nav class="calendar__nav" aria-label="Navegação do mês">
+                <button
+                  class="btn btn--ghost calendar__nav-btn"
+                  type="button"
+                  data-action="calendar-prev"
+                  aria-label="Mês anterior"
+                >
+                  ‹
+                </button>
+                <button
+                  class="btn btn--ghost calendar__nav-btn"
+                  type="button"
+                  data-action="calendar-next"
+                  aria-label="Próximo mês"
+                >
+                  ›
+                </button>
+              </nav>
+            </header>
+
+            <div class="calendar__weekdays" aria-hidden="true">
+              <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span
+              ><span>Qui</span><span>Sex</span><span>Sáb</span>
+            </div>
+
+            <div
+              class="calendar__grid"
+              role="grid"
+              aria-label="Dias do mês"
+              data-calendar-grid
+            >
+              <div class="calendar__day" role="gridcell" aria-disabled="true">
+                —
+              </div>
+            </div>
+
+            <footer class="calendar__legend" aria-label="Legenda">
+              <span class="legend__item"
+                ><span
+                  class="legend__dot legend__dot--dog"
+                  aria-hidden="true"
+                ></span
+                >Cães</span
+              >
+              <span class="legend__item"
+                ><span
+                  class="legend__dot legend__dot--cat"
+                  aria-hidden="true"
+                ></span
+                >Gatos</span
+              >
+              <span class="legend__item"
+                ><span
+                  class="legend__dot legend__dot--today"
+                  aria-hidden="true"
+                ></span
+                >Hoje</span
+              >
+            </footer>
+          </div>
         </div>
       </section>
 
