@@ -1,7 +1,11 @@
 import "../styles/app.css";
 
-import { state } from "./state/state.js";
+import { state as initialState } from "./state/state.js";
+import { createStore } from "./state/store.js";
+import { initModals } from "./features/modals/modals.js";
+
+const store = createStore(initialState);
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("[AuQMia] boot", state.ui);
+  initModals(store);
 });

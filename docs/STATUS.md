@@ -7,12 +7,12 @@
 
 ## Onde paramos
 
-- Bloco atual: 2 — Header (CSS)
+- Bloco atual: 4 — Modais (CSS)
 - Status: Validado
 
 ## O que já foi validado (resumo por blocos)
 
- - [x] Bloco 2 — Header (CSS responsivo + calendário desktop/mobile)
+ - [x] Bloco 4 — Modais (CSS: overlay + backdrop + dialog responsivo)
 
 ## Estado (Fonte da Verdade)
 
@@ -24,9 +24,8 @@
 
 ## Arquivos principais tocados (no bloco atual)
 
-- src/styles/app.css — agregador de imports
-- src/styles/sections/header.css — layout do header
-- src/index.html — CTA calendário mobile
+- src/styles/app.css — import modals.css
+- src/styles/sections/modals.css — estilos dos modais
 
 ## Decisões (as 3 mais importantes)
 

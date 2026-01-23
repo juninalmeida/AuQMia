@@ -7,6 +7,17 @@
   place-items: center;
 
   padding: clamp(1rem, 3vw, 2rem);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-med) var(--ease-premium);
+}
+
+.overlay[hidden] {
+  display: none;
+}
+.modal[hidden] {
+  display: none;
 }
 
 .overlay__backdrop {
@@ -16,11 +27,16 @@
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(0.75rem);
   -webkit-backdrop-filter: blur(0.75rem);
+
+  opacity: 0;
+  transition: opacity var(--t-med) var(--ease-premium);
 }
 
 .modal {
   position: relative;
   z-index: 1;
+
+  pointer-events: none;
 
   width: min(95vw, 52rem);
   max-height: min(85dvh, 48rem);
@@ -41,6 +57,13 @@
   transition:
     opacity var(--t-med) var(--ease-premium),
     transform var(--t-med) var(--ease-premium);
+}
+
+.overlay[hidden] {
+  display: none;
+}
+.modal[hidden] {
+  display: none;
 }
 
 .modal__header {
@@ -106,7 +129,12 @@
 }
 
 .overlay[data-open="true"] {
-  /* overlay visível*/
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay[data-open="true"] .overlay__backdrop {
+  opacity: 1;
 }
 
 .overlay[data-open="true"] .modal[data-open="true"] {
