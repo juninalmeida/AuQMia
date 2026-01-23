@@ -20,6 +20,7 @@
       src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"
     ></script>
   </head>
+
   <body>
     <div id="particles-js" aria-hidden="true"></div>
 
@@ -41,6 +42,7 @@
             <time datetime="2023-11-15">Quarta-feira, 15 de Novembro</time>
           </p>
         </div>
+
         <div class="app-header__actions">
           <button
             class="btn btn--ghost btn--calendar-desktop"
@@ -48,7 +50,7 @@
             data-action="open-calendar"
           >
             <span class="icon icon--calendar" aria-hidden="true"></span>
-            <span>Ver Calendário </span>
+            <span>Ver Calendário</span>
           </button>
 
           <button
@@ -220,6 +222,7 @@
         </div>
       </section>
 
+      <!-- ✅ MODAL NOVO AGENDAMENTO (corrigido) -->
       <section
         id="modal-new"
         class="modal modal--new"
@@ -245,6 +248,26 @@
 
         <div class="modal__body">
           <form class="form" novalidate>
+            <fieldset class="form__field" data-field="petType">
+              <legend class="form__label">Tipo</legend>
+
+              <label class="pet-type">
+                <input type="radio" name="petType" value="dog" checked />
+                <span>Cachorro</span>
+              </label>
+
+              <label class="pet-type">
+                <input type="radio" name="petType" value="cat" />
+                <span>Gato</span>
+              </label>
+
+              <small
+                class="form__error"
+                data-error-for="petType"
+                aria-live="polite"
+              ></small>
+            </fieldset>
+
             <div class="form__field">
               <label class="form__label" for="petName">Nome do Pet</label>
               <input
@@ -254,6 +277,11 @@
                 type="text"
                 placeholder="Ex: Bruce"
               />
+              <small
+                class="form__error"
+                data-error-for="petName"
+                aria-live="polite"
+              ></small>
             </div>
 
             <div class="form__field">
@@ -265,13 +293,68 @@
                 type="text"
                 placeholder="Ex: Júnior Almeida"
               />
+              <small
+                class="form__error"
+                data-error-for="tutorName"
+                aria-live="polite"
+              ></small>
             </div>
 
-            <button
-              class="btn btn--primary"
-              type="submit"
-              data-action="submit-appointment"
-            >
+            <div class="form__field">
+              <label class="form__label" for="service">Serviço</label>
+              <select
+                class="form__control input-dark"
+                id="service"
+                name="service"
+              >
+                <option value="">Selecione o procedimento</option>
+                <option value="Banho">Banho</option>
+                <option value="Tosa Completa">Tosa Completa</option>
+                <option value="Tosa Higiênica">Tosa Higiênica</option>
+                <option value="Hidratação">Hidratação</option>
+                <option value="Corte de Unhas">Corte de Unhas</option>
+                <option value="Limpeza de Ouvido">Limpeza de Ouvido</option>
+              </select>
+              <small
+                class="form__error"
+                data-error-for="service"
+                aria-live="polite"
+              ></small>
+            </div>
+
+            <div class="form__row form__row--2">
+              <div class="form__field">
+                <label class="form__label" for="time">Horário</label>
+                <input
+                  class="form__control input-dark"
+                  id="time"
+                  name="time"
+                  type="time"
+                />
+                <small
+                  class="form__error"
+                  data-error-for="time"
+                  aria-live="polite"
+                ></small>
+              </div>
+
+              <div class="form__field">
+                <label class="form__label" for="dateISO">Data</label>
+                <input
+                  class="form__control input-dark"
+                  id="dateISO"
+                  name="dateISO"
+                  type="date"
+                />
+                <small
+                  class="form__error"
+                  data-error-for="dateISO"
+                  aria-live="polite"
+                ></small>
+              </div>
+            </div>
+
+            <button class="btn btn--primary" type="submit">
               Confirmar Agendamento
             </button>
           </form>

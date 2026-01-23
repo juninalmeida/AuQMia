@@ -59,13 +59,6 @@
     transform var(--t-med) var(--ease-premium);
 }
 
-.overlay[hidden] {
-  display: none;
-}
-.modal[hidden] {
-  display: none;
-}
-
 .modal__header {
   display: flex;
   align-items: center;
@@ -121,6 +114,32 @@
 .form__label {
   font-size: 0.75rem;
   color: rgba(148, 163, 184, 1);
+}
+
+.form__row {
+  display: grid;
+  gap: clamp(0.75rem, 2vw, 1rem);
+}
+
+@media (min-width: 30rem) {
+  .form__row--2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pet-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline-end: 1rem;
+}
+
+.form__error {
+  display: block;
+  min-height: 1em;
+  font-size: 0.75rem;
+  color: rgba(248, 113, 113, 0.9);
+  margin-top: 0.25rem;
 }
 
 .muted {
