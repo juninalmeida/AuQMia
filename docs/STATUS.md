@@ -1,90 +1,112 @@
-# Projeto: AuQMia Agenda
+# Project: AuQMia Agenda
+
+## Status snapshot
+
+- Project is feature-complete for the MVP UI/UX flow.
+- Only minor polish remains (see "Open items").
+
+## How to run
+
+- App: `npm run dev` (webpack dev server on http://localhost:3000)
+- Mock API: `npm run server` (json-server on http://localhost:3001)
+- Dev server proxies `/api` -> `http://localhost:3001`
 
 ## Stack
 
-- npm + Webpack + Babel
-- json-server (a definir)
+- Webpack + Babel + CSS loader stack
+- json-server for mock API
+- Iconify icons
+- particles.js background
 
-## Onde paramos
+## Core UX (implemented)
 
-- Bloco atual: 13 — Cards Aura (CSS: glass + neon dog/cat)
-- Status: em andamento
+- Animated loader screen with cat/dog runners and progress bar (2s duration).
+- Animated particle background.
+- Header date auto-syncs with today.
+- Calendar modal with month nav, selection, and monthly appointment count.
+- Calendar day selection closes the modal and updates the daily list.
+- Daily grid split into morning/afternoon/night.
+- Appointment cards with dog/cat styling, hover effects, delete action.
+- Validation errors shown in a subtle centered notice (1.5s) with glass overlay.
 
-## O que já foi validado (resumo por blocos)
+## Data model
 
-- [x] Bloco 0 — Setup (npm + Webpack/Babel ESM) + tokens globais + .gitignore
-- [x] Bloco 1 — Header (HTML semântico + hooks data-action)
-- [x] Bloco 2 — Header (CSS responsivo + comportamento mobile/desktop)
-- [x] Bloco 3 — Modais (HTML: overlay + dialogs)
-- [x] Bloco 4 — Modais (CSS: overlay/backdrop + glass + responsivo)
-- [x] Bloco 5 — Modais (JS: state → render; open/close/esc/backdrop)
-- [x] Bloco 6 — Calendário (HTML: toolbar + grid + legenda)
-- [x] Bloco 7 — Calendário (CSS: grid 7 colunas + estados + legenda)
-- [x] Bloco 8 — Calendário (JS: render mês via state + prev/next + select)
-- [x] Bloco 9 — Grid Diário (HTML: manhã/tarde/noite + data-slot)
-- [x] Bloco 10 — Grid Diário (CSS: layout responsivo + headers)
-- [x] Bloco 11 — Agendamentos (JS: form → state → render diário + validação + sync da data selecionada)
-- [x] Bloco 12 — Header Aura (ícones iconify + botões com brilho + alinhamento)
-- [x] Bloco 12.1 — Modal Novo Agendamento Aura (HTML/CSS)
+- State shape:
+  - ui:
+    - modals: { calendarOpen: boolean, newAppointmentOpen: boolean }
+    - calendar: { year: number, month: number, selectedDateISO: string }
+  - data:
+    - appointments: Array<{
+      id: string,
+      petType: "dog" | "cat",
+      petName: string,
+      ownerName: string,
+      service: string, // service id from API
+      dateISO: string, // YYYY-MM-DD
+      time: string // HH:mm
+      }>
 
-## Estado (Fonte da Verdade)
+## API (json-server)
 
-- Shape do estado (resumo):
-  - state = {
-    ui: {
-    modals: { calendarOpen: boolean, newAppointmentOpen: boolean },
-    calendar: { year: number, month: number, selectedDateISO: string }
-    },
-    data: {
-    appointments: Array<{
-    id: string,
-    petType: "dog" | "cat",
-    petName: string,
-    ownerName: string,
-    service: string,
-    dateISO: string,
-    time: string
-    }>
-    }
-    }
-- Regras importantes:
-  - DOM é saída: UI sempre reflete o state (hidden/aria/data-open etc.)
-  - Proibido usar DOM como fonte de verdade (nada de contar/ler texto/classes pra regra)
-  - Nunca dois modais abertos ao mesmo tempo
-  - Cards e dots do calendário refletem state.data.appointments
-  - Ao salvar agendamento, state.ui.calendar sincroniza para a dateISO do novo item
+- db.json:
+  - services: list of service { id, label }
+  - appointments: list of saved appointments
+- Endpoints:
+  - GET /api/services
+  - GET /api/appointments
+  - POST /api/appointments
+  - DELETE /api/appointments/:id
+- Service labels are populated from API and used on cards.
 
-## Arquivos principais tocados (no bloco atual)
+## Validation rules
 
-- src/styles/sections/appointments.css — estilos do card (.appt-card) com glass + neon dog/cat (a criar)
-- src/styles/app.css — import do appointments.css (a fazer)
-- src/js/features/appointments/appointments.js — adicionar class appt-card--dog/cat no render (a fazer)
+- Required fields: petType, petName, ownerName, service, time, dateISO.
+- dateISO cannot be in the past.
+- If dateISO is today, time must be in the future.
+- Conflicts are blocked: no two appointments can share the same date + time.
 
-## Decisões (as 3 mais importantes)
+## Key files
 
-- 1. Estado central como fonte da verdade; fluxo: Input → State → Processamento → Render
-- 2. Contrato HTML↔JS: FormData (name=) + render targets (data-slot / data-calendar-grid)
-- 3. Criar agendamento sincroniza selectedDateISO para garantir render imediato no grid diário
+- `src/index.html`:
+  - Loader markup
+  - App layout (header, day grid, modals, notice)
+- `src/js/main.js`:
+  - Loader logic
+  - Header date sync
+  - Particles init
+- `src/js/features/modals/modals.js`:
+  - Modal open/close state + ESC/backdrop behavior
+- `src/js/features/calendar/calendar.js`:
+  - Calendar rendering
+  - Month navigation
+  - Day selection + close modal
+  - Monthly appointment count
+- `src/js/features/appointments/appointments.js`:
+  - Services fetch and select population
+  - Appointments fetch/save/delete
+  - Daily list render + card layout
+  - Error notice + cooldown
+- `src/utils/validators.js`:
+  - Validation logic for appointments
+- `src/styles/global.css`:
+  - Global tokens
+  - Loader styles + animations
+- `src/styles/sections/*.css`:
+  - Header, modals, calendar, day grid, appointments
+- `db.json`:
+  - Mock API data
+- `webpack.config.js`:
+  - Dev server proxy and favicon handling
 
-## Próximos passos (3 itens)
+## Open items / polish
 
-- 1. Criar appointments.css com glass-card + neon hover dog/cat (fiel ao Aura)
-- 2. Importar appointments.css no app.css
-- 3. Render: aplicar classe appt-card--dog/cat baseada em appointment.petType
+- Add edit flow for appointments (currently only delete).
+- Optional: improve API offline UX (notice when server is down).
+- Optional: extend tests/automation (none added yet).
+- Optional: unify language across UI strings (some UI text remains PT-BR).
 
-## Bugs / Pendências
+## Notes
 
-- Console: -
-- Comportamento: -
-
-## Smoke test (manual)
-
-- Abrir app no dev server (OK)
-- Abrir/fechar modais (X/backdrop/ESC) (OK)
-- Navegar mês prev/next e selecionar dia (OK)
-- Criar agendamento: vazio → mostra erros / válido → cria card no período correto (OK)
-- Criar agendamento para outra data → calendário sincroniza e mostra card (OK)
-
-## Último commit
-
-- feat: alinhar header aura com ícones e brilho
+- Appointment list only persists when json-server is running.
+- The date input in the new appointment form syncs the calendar selection.
+- Calendar selection drives which appointments are visible in the daily grid.
