@@ -56,7 +56,6 @@
             type="button"
             data-action="open-calendar"
           >
-            <span class="icon icon--calendar" aria-hidden="true"></span>
             <iconify-icon
               icon="solar:calendar-minimalistic-linear"
               class="btn__icon"
@@ -140,14 +139,18 @@
           </section>
         </section>
 
-        <button
-          class="btn btn--calendar-mobile"
-          type="button"
-          data-action="open-calendar"
-        >
-          <span class="icon icon--calendar" aria-hidden="true"></span>
-          <span>Ver Calendário Completo</span>
-        </button>
+          <button
+            class="btn btn--calendar-mobile"
+            type="button"
+            data-action="open-calendar"
+          >
+            <iconify-icon
+              icon="solar:calendar-minimalistic-linear"
+              class="btn__icon"
+              aria-hidden="true"
+            ></iconify-icon>
+            <span>Ver Calendário Completo</span>
+          </button>
       </main>
     </div>
 
@@ -182,51 +185,65 @@
         data-modal="calendar"
         hidden
       >
-        <header class="modal__header">
-          <h2 id="modal-calendar-title" class="modal__title">
-            Calendário Mensal
-          </h2>
+        <header class="modal__header modal__header--calendar">
+          <div class="modal__title-block">
+            <h2 id="modal-calendar-title" class="modal__title modal__title--calendar">
+              <iconify-icon
+                icon="solar:calendar-date-linear"
+                class="modal__title-icon"
+                aria-hidden="true"
+              ></iconify-icon>
+              Calendário Mensal
+            </h2>
+            <p class="modal__subtitle">
+              <span data-calendar-count>0</span> agendamentos em
+              <span data-calendar-month>Novembro</span>
+              <span data-calendar-year>2026</span>
+            </p>
+          </div>
 
-          <button
-            class="modal__close"
-            type="button"
-            data-action="close-all"
-            aria-label="Fechar"
-          >
-            x
-          </button>
+          <div class="modal__header-actions">
+            <nav class="calendar__nav" aria-label="Navegação do mês">
+              <button
+                class="calendar__nav-btn"
+                type="button"
+                data-action="calendar-prev"
+                aria-label="Mês anterior"
+              >
+                <iconify-icon
+                  icon="solar:alt-arrow-left-linear"
+                  aria-hidden="true"
+                ></iconify-icon>
+              </button>
+              <button
+                class="calendar__nav-btn"
+                type="button"
+                data-action="calendar-next"
+                aria-label="Próximo mês"
+              >
+                <iconify-icon
+                  icon="solar:alt-arrow-right-linear"
+                  aria-hidden="true"
+                ></iconify-icon>
+              </button>
+            </nav>
+
+            <button
+              class="modal__close modal__close--icon"
+              type="button"
+              data-action="close-all"
+              aria-label="Fechar"
+            >
+              <iconify-icon
+                icon="solar:close-circle-linear"
+                aria-hidden="true"
+              ></iconify-icon>
+            </button>
+          </div>
         </header>
 
         <div class="modal__body">
           <div class="calendar" aria-label="Calendário mensal">
-            <header class="calendar__toolbar">
-              <p class="calendar__meta">
-                <span class="calendar__month" data-calendar-month
-                  >Novembro</span
-                >
-                <span class="calendar__year" data-calendar-year>2026</span>
-              </p>
-
-              <nav class="calendar__nav" aria-label="Navegação do mês">
-                <button
-                  class="btn btn--ghost calendar__nav-btn"
-                  type="button"
-                  data-action="calendar-prev"
-                  aria-label="Mês anterior"
-                >
-                  ‹
-                </button>
-                <button
-                  class="btn btn--ghost calendar__nav-btn"
-                  type="button"
-                  data-action="calendar-next"
-                  aria-label="Próximo mês"
-                >
-                  ›
-                </button>
-              </nav>
-            </header>
-
             <div class="calendar__weekdays" aria-hidden="true">
               <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span
               ><span>Qui</span><span>Sex</span><span>Sáb</span>

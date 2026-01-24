@@ -67,6 +67,7 @@ export function initCalendar(store) {
   const monthEl = document.querySelector("[data-calendar-month]");
   const yearEl = document.querySelector("[data-calendar-year]");
   const gridEl = document.querySelector("[data-calendar-grid]");
+  const countEl = document.querySelector("[data-calendar-count]");
 
   if (!monthEl || !yearEl || !gridEl) return;
 
@@ -79,6 +80,13 @@ export function initCalendar(store) {
 
     monthEl.textContent = monthLabelPT(month);
     yearEl.textContent = String(year);
+    if (countEl) {
+      const count = (state.data.appointments || []).filter((a) => {
+        const [y, m] = a.dateISO.split("-").map(Number);
+        return y === year && m === month + 1;
+      }).length;
+      countEl.textContent = String(count);
+    }
 
     const cells = getMonthGrid(year, month);
     gridEl.innerHTML = "";

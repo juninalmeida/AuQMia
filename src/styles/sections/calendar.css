@@ -3,43 +3,32 @@
   gap: clamp(1rem, 2vw, 1.5rem);
 }
 
-.calendar__toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.calendar__meta {
-  margin: 0;
-  display: flex;
-  gap: 0.5rem;
-  align-items: baseline;
-
-  color: rgba(255, 255, 255, 0.95);
-  font-weight: 600;
-}
-
-.calendar__month {
-  font-size: clamp(1rem, 0.95rem + 0.4vw, 1.25rem);
-}
-
-.calendar__year {
-  font-size: 0.875rem;
-  color: rgba(148, 163, 184, 1);
-  font-weight: 500;
-}
-
 .calendar__nav {
   display: flex;
   gap: 0.5rem;
 }
 
 .calendar__nav-btn {
-  padding: 0;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.625rem;
+  border: 0;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(226, 232, 240, 0.9);
+  cursor: pointer;
+  transition:
+    background var(--t-med) var(--ease-premium),
+    color var(--t-med) var(--ease-premium),
+    transform var(--t-med) var(--ease-premium);
+}
+
+.calendar__nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: translateY(-0.0625rem);
 }
 
 .calendar__weekdays {
@@ -49,9 +38,9 @@
   text-align: center;
 
   font-size: 0.625rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(148, 163, 184, 0.75);
+  color: rgba(148, 163, 184, 0.8);
   font-weight: 700;
 }
 
@@ -68,10 +57,9 @@
 .calendar__day {
   position: relative;
   aspect-ratio: 1;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
 
   display: flex;
-  align-items: center;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -80,13 +68,14 @@
   color: rgba(148, 163, 184, 1);
 
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid transparent;
 
   cursor: pointer;
   transition:
     background var(--t-med) var(--ease-premium),
     border-color var(--t-med) var(--ease-premium),
-    transform var(--t-med) var(--ease-premium);
+    transform var(--t-med) var(--ease-premium),
+    color var(--t-med) var(--ease-premium);
 }
 
 .calendar__day:hover {
@@ -95,7 +84,7 @@
 }
 
 .calendar__day[aria-disabled="true"] {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: default;
 }
 
@@ -165,4 +154,15 @@
 .legend__dot--today {
   background: rgba(99, 102, 241, 1);
   border: 1px solid rgba(165, 180, 252, 1);
+}
+
+@media (min-width: 48rem) {
+  .calendar__nav-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .calendar__weekdays {
+    font-size: 0.6875rem;
+  }
 }
