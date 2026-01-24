@@ -158,9 +158,19 @@ export function initCalendar(store) {
 
     const dayEl = e.target.closest(".calendar__day[data-date]");
     if (dayEl && !dayEl.disabled) {
-      dispatch({
-        type: "CAL_SELECT_DATE",
-        payload: { dateISO: dayEl.dataset.date },
+      const dateISO = dayEl.dataset.date;
+      store.update((prev) => {
+        const withDate = reduceCalendar(prev, {
+          type: "CAL_SELECT_DATE",
+          payload: { dateISO },
+        });
+        return {
+          ...withDate,
+          ui: {
+            ...withDate.ui,
+            modals: { ...withDate.ui.modals, calendarOpen: false },
+          },
+        };
       });
     }
   });

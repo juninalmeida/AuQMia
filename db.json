@@ -30,24 +30,6 @@
       "service": "vet-consult",
       "time": "15:30",
       "dateISO": "2026-02-24"
-    },
-    {
-      "id": "1769226464027-ece0da0d4e884",
-      "petType": "dog",
-      "petName": "Bruce",
-      "ownerName": "Júnior",
-      "service": "bath-groom",
-      "time": "15:30",
-      "dateISO": "2026-01-24"
-    },
-    {
-      "id": "1769226478511-f0184b83a1e42",
-      "petType": "cat",
-      "petName": "Nina",
-      "ownerName": "Karol",
-      "service": "vet-consult",
-      "time": "15:30",
-      "dateISO": "2026-01-25"
     }
   ]
 }
