@@ -12,6 +12,14 @@ function sortByTime(a, b) {
   return a.time.localeCompare(b.time);
 }
 
+function getCalendarFromISO(dateISO) {
+  const [yearStr, monthStr] = dateISO.split("-");
+  const year = Number(yearStr);
+  const month = Number(monthStr) - 1;
+
+  return { year, month, selectedDateISO: dateISO };
+}
+
 function reduceAppointments(prevState, action) {
   if (action.type !== "ADD_APPOINTMENT") return prevState;
 
@@ -144,13 +152,27 @@ export function initAppointments(store) {
     };
   }
 
+  function updateCalendar(nextState, dateISO) {
+    return {
+      ...nextState,
+      ui: {
+        ...nextState.ui,
+        calendar: {
+          ...nextState.ui.calendar,
+          ...getCalendarFromISO(dateISO),
+        },
+      },
+    };
+  }
+
   function dispatchAdd(appointment) {
     store.update((prev) => {
       const withAppt = reduceAppointments(prev, {
         type: "ADD_APPOINTMENT",
         payload: { appointment },
       });
-      return closeAllModals(withAppt);
+      const withCalendar = updateCalendar(withAppt, appointment.dateISO);
+      return closeAllModals(withCalendar);
     });
   }
 
