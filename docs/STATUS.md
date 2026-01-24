@@ -7,7 +7,7 @@
 
 ## Onde paramos
 
-- Bloco atual: 12 — Cards Aura (CSS: glass + neon dog/cat)
+- Bloco atual: 13 — Cards Aura (CSS: glass + neon dog/cat)
 - Status: em andamento
 
 ## O que já foi validado (resumo por blocos)
@@ -24,6 +24,7 @@
 - [x] Bloco 9 — Grid Diário (HTML: manhã/tarde/noite + data-slot)
 - [x] Bloco 10 — Grid Diário (CSS: layout responsivo + headers)
 - [x] Bloco 11 — Agendamentos (JS: form → state → render diário + validação + sync da data selecionada)
+- [x] Bloco 12 — Header Aura (ícones iconify + botões com brilho + alinhamento)
 
 ## Estado (Fonte da Verdade)
 
@@ -85,4 +86,4 @@
 
 ## Último commit
 
-- fix: selecionar data do agendamento ao salvar (hash curto aqui)
+- feat: alinhar header aura com ícones e brilho

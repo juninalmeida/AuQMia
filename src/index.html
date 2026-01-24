@@ -29,7 +29,10 @@
         <div class="app-header__brand">
           <div class="brand">
             <div class="brand__logo" aria-hidden="true">
-              <!-- icone css -->
+              <iconify-icon
+                icon="solar:paw-bold-duotone"
+                class="brand__logo-icon"
+              ></iconify-icon>
             </div>
             <h1 class="brand__title">
               <span class="brand__name font-serif-premium">AuQMia</span>
@@ -38,7 +41,11 @@
           </div>
 
           <p class="app-header__date">
-            <span class="icon icon--calendar" aria-hidden="true"></span>
+            <iconify-icon
+              icon="solar:calendar-linear"
+              class="app-header__date-icon"
+              aria-hidden="true"
+            ></iconify-icon>
             <time datetime="2023-11-15">Quarta-feira, 15 de Novembro</time>
           </p>
         </div>
@@ -50,7 +57,12 @@
             data-action="open-calendar"
           >
             <span class="icon icon--calendar" aria-hidden="true"></span>
-            <span>Ver Calendário</span>
+            <iconify-icon
+              icon="solar:calendar-minimalistic-linear"
+              class="btn__icon"
+              aria-hidden="true"
+            ></iconify-icon>
+            <span class="btn__label">Ver Calendário</span>
           </button>
 
           <button
@@ -58,8 +70,12 @@
             type="button"
             data-action="open-new-appointment"
           >
-            <span>Novo Agendamento</span>
-            <span class="icon icon--add" aria-hidden="true"></span>
+            <span class="btn__label">Novo Agendamento</span>
+            <iconify-icon
+              icon="solar:add-circle-linear"
+              class="btn__icon"
+              aria-hidden="true"
+            ></iconify-icon>
           </button>
         </div>
       </header>
