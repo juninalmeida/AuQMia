@@ -21,13 +21,31 @@ function formatPtBrDate(date) {
     .replace(/ de ([a-záéíóúãõç])/g, (_, ch) => ` de ${ch.toUpperCase()}`);
 }
 
-function initHeaderDate() {
+function initHeaderDate(store) {
   const timeEl = document.querySelector(".app-header__date time");
   if (!timeEl) return;
 
-  const today = new Date();
-  timeEl.dateTime = toISODate(today);
-  timeEl.textContent = formatPtBrDate(today);
+  let lastDateISO = null;
+
+  function parseISO(dateISO) {
+    if (!dateISO) return new Date();
+    const [year, month, day] = dateISO.split("-").map(Number);
+    if (!year || !month || !day) return new Date();
+    return new Date(year, month - 1, day);
+  }
+
+  function render(state) {
+    const selectedISO =
+      state?.ui?.calendar?.selectedDateISO || toISODate(new Date());
+    if (selectedISO === lastDateISO) return;
+    lastDateISO = selectedISO;
+    const date = parseISO(selectedISO);
+    timeEl.dateTime = selectedISO;
+    timeEl.textContent = formatPtBrDate(date);
+  }
+
+  render(store.getState());
+  store.subscribe(render);
 }
 
 function initLoader() {
@@ -154,6 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initModals(store);
   initCalendar(store);
   initAppointments(store);
-  initHeaderDate();
+  initHeaderDate(store);
   initParticlesBackground();
 });

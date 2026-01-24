@@ -41,7 +41,8 @@ O **AuQMia Agenda** é uma aplicação de um projeto prático desenvolvida focad
 **O que este projeto demonstra tecnicamente:**
 
 - **Organização por features** (appointments, calendar, modals) com estado centralizado.
-- **Integração com mock API** via `json-server`, consumindo serviços e agendamentos.
+- **Integração com mock API** via `json-server` no desenvolvimento.
+- **Modo estático** para GitHub Pages com dados seed em JSON + persistência em `localStorage`.
 - **Renderização dinâmica** de listas e calendário com indicadores por espécie.
 - **Validações temporais** (data/horário) e prevenção de conflitos.
 
@@ -55,7 +56,7 @@ O **AuQMia Agenda** é uma aplicação de um projeto prático desenvolvida focad
 
 ## 🎬 Demo
 
-- **Deploy:** Em breve
+- **Deploy:** GitHub Pages (pasta `/docs`)
 - **Preview visual da interface:**
 
   ![Preview da interface AuQMia](docs/preview.svg)
@@ -68,6 +69,7 @@ O **AuQMia Agenda** é uma aplicação de um projeto prático desenvolvida focad
 
 - ✅ 📅 Calendário mensal interativo com seleção de dia
 - ✅ 🐶🐱 Agenda diária segmentada por manhã/tarde/noite
+- ✅ 🗓️ Data do cabeçalho sincronizada com o dia selecionado
 - ✅ ✍️ Cadastro de agendamentos com dados do pet e tutor
 - ✅ 🗑️ Remoção de agendamentos com atualização imediata
 
@@ -92,7 +94,7 @@ O **AuQMia Agenda** é uma aplicação de um projeto prático desenvolvida focad
 - Particles.js (background)
 - Google Fonts: Inter e Playfair Display
 
-**Backend / Mock API**
+**Backend / Mock API (opcional, apenas desenvolvimento)**
 
 - json-server `^0.17.4`
 
@@ -471,6 +473,8 @@ AuQMia/
 ├─ 📁 src/
 │  ├─ 📁 assets/
 │  │  └─ 🖼️ favicon.svg
+│  ├─ 📁 data/
+│  │  └─ 📄 fallback.json
 │  ├─ 📁 js/
 │  │  ├─ 📁 features/
 │  │  │  ├─ 📁 appointments/
@@ -486,6 +490,7 @@ AuQMia/
 │  │  ├─ 📄 ids.js
 │  │  └─ 📄 validators.js
 │  └─ 📄 index.html
+├─ 📁 docs/
 ├─ 📁 dist/
 ├─ 📄 db.json
 ├─ 📄 webpack.config.js
@@ -515,20 +520,20 @@ AuQMia/
 # 1) instalar dependências
 npm install
 
-# 2) subir a API mock (em outro terminal)
+# 2) (opcional) subir a API mock (em outro terminal)
 npm run server
 
 # 3) iniciar o ambiente de desenvolvimento
 npm run dev
 
-# 4) gerar build otimizado
+# 4) gerar build otimizado (saída em /docs)
 npm run build
 
 # 5) (opcional) visualizar o build localmente
-npx serve dist
+npx serve docs
 ```
 
-**Deploy (produção):** publique a pasta `dist/` em um serviço estático (GitHub Pages, Vercel, Netlify, etc.).
+**Deploy (produção):** publique a pasta `docs/` (GitHub Pages) ou aponte para ela em um host estático.
 
 <a id="como-usar"></a>
 
