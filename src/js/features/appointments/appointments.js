@@ -184,6 +184,12 @@ export function initAppointments(store) {
 
   const submitIcon = form.querySelector("[data-submit-icon]");
   const submitButton = form.querySelector(".form__submit");
+  const notice = document.querySelector("[data-notice]");
+  const noticeMessage = notice?.querySelector("[data-notice-message]");
+  let noticeTimer = null;
+  let noticeCooldown = false;
+  let noticeCooldownTimer = null;
+  let noticeResetTimer = null;
 
   const FIELDS = [
     "petType",
@@ -200,6 +206,52 @@ export function initAppointments(store) {
       const key = el.getAttribute("data-error-for");
       el.textContent = errors[key] || "";
     });
+  }
+
+  function clearInlineErrors() {
+    renderFormErrors({});
+    FIELDS.forEach((field) => setInvalid(field, false));
+  }
+
+  function closeNotice() {
+    if (!notice) return;
+    notice.dataset.open = "false";
+    if (noticeTimer) {
+      clearTimeout(noticeTimer);
+      noticeTimer = null;
+    }
+    setTimeout(() => {
+      notice.hidden = true;
+    }, 250);
+  }
+
+  function showNotice(message) {
+    if (!notice || !noticeMessage || !message) return;
+    if (noticeCooldown) return;
+    noticeMessage.textContent = message;
+    notice.hidden = false;
+    requestAnimationFrame(() => {
+      notice.dataset.open = "true";
+    });
+    if (noticeTimer) clearTimeout(noticeTimer);
+    noticeTimer = setTimeout(closeNotice, 1500);
+    if (noticeCooldownTimer) clearTimeout(noticeCooldownTimer);
+    noticeCooldown = true;
+    noticeCooldownTimer = setTimeout(() => {
+      noticeCooldown = false;
+    }, 1500);
+
+    if (noticeResetTimer) clearTimeout(noticeResetTimer);
+    noticeResetTimer = setTimeout(() => {
+      clearInlineErrors();
+      updateSubmitIcon();
+      noticeResetTimer = null;
+    }, 1500);
+  }
+
+  function formatNoticeMessage(errors) {
+    const messages = Object.values(errors).filter(Boolean);
+    return messages.length ? messages.join(" • ") : "";
   }
 
   function setInvalid(field, isInvalid) {
@@ -299,6 +351,7 @@ export function initAppointments(store) {
 
   updateSubmitIcon();
 
+
   form.addEventListener("change", (e) => {
     const target = e.target;
     if (!(target instanceof HTMLInputElement)) return;
@@ -326,11 +379,28 @@ export function initAppointments(store) {
     if (!ok) {
       renderFormErrors(errors);
       Object.keys(errors).forEach((field) => setInvalid(field, true));
+      showNotice(formatNoticeMessage(errors));
       return;
     }
 
     renderFormErrors({});
     FIELDS.forEach((f) => setInvalid(f, false));
+
+    const hasConflict = store
+      .getState()
+      .data.appointments.some(
+        (appointment) =>
+          appointment.dateISO === draft.dateISO &&
+          appointment.time === draft.time,
+      );
+
+    if (hasConflict) {
+      const conflictError = { time: "Horário já ocupado" };
+      renderFormErrors(conflictError);
+      setInvalid("time", true);
+      showNotice(formatNoticeMessage(conflictError));
+      return;
+    }
 
     const appointment = { id: makeId(), ...draft };
 
