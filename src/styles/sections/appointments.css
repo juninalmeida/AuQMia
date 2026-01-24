@@ -20,6 +20,10 @@
   cursor: pointer;
 }
 
+.appt-card:hover {
+  background: rgba(20, 20, 30, 0.5);
+}
+
 .appt-card--dog {
   border-color: rgba(6, 182, 212, 0.3);
 }
@@ -87,6 +91,14 @@
   height: 1.3rem;
   font-size: 1.3rem;
   line-height: 1;
+  transition:
+    transform var(--t-med) var(--ease-premium),
+    filter var(--t-med) var(--ease-premium);
+}
+
+.appt-card:hover .appt-card__avatar-icon {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 6px rgba(226, 232, 240, 0.35));
 }
 
 .appt-card__pet {
