@@ -35,12 +35,15 @@ function getCalendarFromISO(dateISO) {
 }
 
 function reduceAppointments(prevState, action) {
-  if (action.type !== "ADD_APPOINTMENT") return prevState;
+  if (action.type !== "ADD_APPOINTMENT" && action.type !== "REMOVE_APPOINTMENT")
+    return prevState;
 
-  const nextAppointments = [
-    ...prevState.data.appointments,
-    action.payload.appointment,
-  ];
+  const nextAppointments =
+    action.type === "ADD_APPOINTMENT"
+      ? [...prevState.data.appointments, action.payload.appointment]
+      : prevState.data.appointments.filter(
+          (appointment) => appointment.id !== action.payload.id,
+        );
 
   return {
     ...prevState,
@@ -75,7 +78,7 @@ function renderCard(appt) {
   const petIcon = document.createElement("iconify-icon");
   petIcon.setAttribute(
     "icon",
-    appt.petType === "cat" ? "solar:cat-linear" : "solar:dog-linear",
+    appt.petType === "cat" ? "solar:cat-linear" : "mdi:dog",
   );
   petIcon.setAttribute("aria-hidden", "true");
   petIcon.className = "appt-card__avatar-icon";
@@ -124,10 +127,12 @@ function renderCard(appt) {
   const editBtn = document.createElement("button");
   editBtn.type = "button";
   editBtn.className = "appt-card__action";
-  editBtn.setAttribute("aria-label", "Editar");
+  editBtn.setAttribute("aria-label", "Excluir");
+  editBtn.dataset.action = "delete-appointment";
+  editBtn.dataset.appointmentId = appt.id;
 
   const editIcon = document.createElement("iconify-icon");
-  editIcon.setAttribute("icon", "solar:pen-linear");
+  editIcon.setAttribute("icon", "solar:trash-bin-trash-linear");
   editIcon.setAttribute("aria-hidden", "true");
   editBtn.appendChild(editIcon);
 
@@ -243,6 +248,15 @@ export function initAppointments(store) {
     });
   }
 
+  function dispatchRemove(id) {
+    store.update((prev) =>
+      reduceAppointments(prev, {
+        type: "REMOVE_APPOINTMENT",
+        payload: { id },
+      }),
+    );
+  }
+
   function render(state) {
     renderDaily(state);
 
@@ -323,5 +337,17 @@ export function initAppointments(store) {
     dispatchAdd(appointment);
     form.reset();
     updateSubmitIcon();
+  });
+
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLElement)) return;
+    const btn = target.closest('[data-action="delete-appointment"]');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const id = btn.getAttribute("data-appointment-id");
+    if (!id) return;
+    dispatchRemove(id);
   });
 }
