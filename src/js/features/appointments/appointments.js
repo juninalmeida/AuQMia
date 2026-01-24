@@ -1,6 +1,6 @@
 import { makeId } from "../../../utils/ids.js";
 import { validateAppointment } from "../../../utils/validators.js";
-import fallbackData from "../../../../db.json";
+import fallbackData from "../../../data/fallback.json";
 
 const API_BASE = "/api";
 const IS_BROWSER = typeof window !== "undefined";
