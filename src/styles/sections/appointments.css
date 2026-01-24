@@ -1,13 +1,23 @@
 .appt-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
   background: rgba(20, 20, 30, 0.4);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 20px;
+  border-radius: var(--r-2xl);
+  padding: 1.25rem;
 
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    transform var(--t-slow) var(--ease-premium),
+    border-color var(--t-slow) var(--ease-premium),
+    box-shadow var(--t-slow) var(--ease-premium);
+
+  cursor: pointer;
 }
 
 .appt-card--dog {
@@ -31,4 +41,132 @@
   box-shadow:
     0 10px 40px -10px rgba(232, 121, 249, 0.3),
     inset 0 0 20px rgba(232, 121, 249, 0.05);
+}
+
+.appt-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.appt-card__identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.appt-card__avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+}
+
+.appt-card__avatar--dog {
+  background: rgba(8, 47, 73, 0.4);
+  border-color: rgba(34, 211, 238, 0.2);
+  color: rgba(34, 211, 238, 0.9);
+  box-shadow: 0 0 0.625rem rgba(34, 211, 238, 0.1);
+}
+
+.appt-card__avatar--cat {
+  background: rgba(65, 7, 73, 0.4);
+  border-color: rgba(232, 121, 249, 0.2);
+  color: rgba(232, 121, 249, 0.9);
+  box-shadow: 0 0 0.625rem rgba(232, 121, 249, 0.1);
+}
+
+.appt-card__avatar-icon {
+  font-size: 1.25rem;
+}
+
+.appt-card__pet {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.appt-card__owner {
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(148, 163, 184, 1);
+}
+
+.appt-card__time {
+  font-size: 1.125rem;
+  font-weight: 500;
+  font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, monospace;
+}
+
+.appt-card--dog .appt-card__time {
+  color: rgba(186, 230, 253, 0.9);
+}
+
+.appt-card--cat .appt-card__time {
+  color: rgba(240, 171, 252, 0.9);
+}
+
+.appt-card__footer {
+  margin-top: 0.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.appt-card__service {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.appt-card__service-icon {
+  font-size: 0.875rem;
+}
+
+.appt-card__service-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.appt-card--dog .appt-card__service {
+  color: rgba(224, 242, 254, 0.7);
+}
+
+.appt-card--cat .appt-card__service {
+  color: rgba(250, 232, 255, 0.7);
+}
+
+.appt-card__actions {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity var(--t-med) var(--ease-premium);
+}
+
+.appt-card:hover .appt-card__actions,
+.appt-card:focus-within .appt-card__actions {
+  opacity: 1;
+}
+
+.appt-card__action {
+  border: 0;
+  background: transparent;
+  color: rgba(148, 163, 184, 0.9);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.appt-card__action:hover {
+  color: #fff;
 }

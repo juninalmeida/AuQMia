@@ -12,6 +12,20 @@ function sortByTime(a, b) {
   return a.time.localeCompare(b.time);
 }
 
+const SERVICE_META = {
+  banho: { label: "Banho", icon: "solar:bath-linear" },
+  tosa_completa: { label: "Tosa Completa", icon: "solar:scissors-linear" },
+  tosa_higienica: { label: "Tosa Higiênica", icon: "solar:scissors-linear" },
+  hidratacao: { label: "Hidratação", icon: "solar:bath-linear" },
+  unhas: { label: "Corte de Unhas", icon: "solar:scissors-linear" },
+  ouvido: { label: "Limpeza de Ouvido", icon: "solar:syringe-linear" },
+};
+
+function getServiceMeta(service) {
+  if (SERVICE_META[service]) return SERVICE_META[service];
+  return { label: service, icon: "solar:scissors-linear" };
+}
+
 function getCalendarFromISO(dateISO) {
   const [yearStr, monthStr] = dateISO.split("-");
   const year = Number(yearStr);
@@ -47,30 +61,80 @@ function renderEmpty(listEl, label) {
 
 function renderCard(appt) {
   const li = document.createElement("li");
-  li.className = "appt-card";
+  li.className = `appt-card appt-card--${appt.petType || "dog"}`;
 
   const top = document.createElement("div");
   top.className = "appt-card__top";
 
-  const title = document.createElement("strong");
+  const identity = document.createElement("div");
+  identity.className = "appt-card__identity";
+
+  const avatar = document.createElement("div");
+  avatar.className = `appt-card__avatar appt-card__avatar--${appt.petType || "dog"}`;
+
+  const petIcon = document.createElement("iconify-icon");
+  petIcon.setAttribute(
+    "icon",
+    appt.petType === "cat" ? "solar:cat-linear" : "solar:dog-linear",
+  );
+  petIcon.setAttribute("aria-hidden", "true");
+  petIcon.className = "appt-card__avatar-icon";
+  avatar.appendChild(petIcon);
+
+  const identityText = document.createElement("div");
+
+  const title = document.createElement("h3");
   title.className = "appt-card__pet";
   title.textContent = appt.petName;
+
+  const owner = document.createElement("p");
+  owner.className = "appt-card__owner";
+  owner.textContent = appt.ownerName;
+
+  identityText.append(title, owner);
+  identity.append(avatar, identityText);
 
   const time = document.createElement("span");
   time.className = "appt-card__time";
   time.textContent = appt.time;
 
-  top.append(title, time);
+  top.append(identity, time);
 
-  const sub = document.createElement("div");
-  sub.className = "appt-card__sub";
-  sub.textContent = appt.ownerName;
+  const footer = document.createElement("div");
+  footer.className = "appt-card__footer";
 
-  const svc = document.createElement("div");
-  svc.className = "appt-card__svc";
-  svc.textContent = appt.service;
+  const service = document.createElement("div");
+  service.className = "appt-card__service";
 
-  li.append(top, sub, svc);
+  const serviceMeta = getServiceMeta(appt.service);
+  const serviceIcon = document.createElement("iconify-icon");
+  serviceIcon.setAttribute("icon", serviceMeta.icon);
+  serviceIcon.setAttribute("aria-hidden", "true");
+  serviceIcon.className = "appt-card__service-icon";
+
+  const serviceLabel = document.createElement("span");
+  serviceLabel.className = "appt-card__service-label";
+  serviceLabel.textContent = serviceMeta.label;
+
+  service.append(serviceIcon, serviceLabel);
+
+  const actions = document.createElement("div");
+  actions.className = "appt-card__actions";
+
+  const editBtn = document.createElement("button");
+  editBtn.type = "button";
+  editBtn.className = "appt-card__action";
+  editBtn.setAttribute("aria-label", "Editar");
+
+  const editIcon = document.createElement("iconify-icon");
+  editIcon.setAttribute("icon", "solar:pen-linear");
+  editIcon.setAttribute("aria-hidden", "true");
+  editBtn.appendChild(editIcon);
+
+  actions.appendChild(editBtn);
+  footer.append(service, actions);
+
+  li.append(top, footer);
   return li;
 }
 
