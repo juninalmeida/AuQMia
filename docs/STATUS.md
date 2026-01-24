@@ -25,6 +25,7 @@
 - [x] Bloco 10 — Grid Diário (CSS: layout responsivo + headers)
 - [x] Bloco 11 — Agendamentos (JS: form → state → render diário + validação + sync da data selecionada)
 - [x] Bloco 12 — Header Aura (ícones iconify + botões com brilho + alinhamento)
+- [x] Bloco 12.1 — Modal Novo Agendamento Aura (HTML/CSS)
 
 ## Estado (Fonte da Verdade)
 
@@ -39,7 +40,7 @@
     id: string,
     petType: "dog" | "cat",
     petName: string,
-    tutorName: string,
+    ownerName: string,
     service: string,
     dateISO: string,
     time: string

@@ -238,7 +238,6 @@
         </div>
       </section>
 
-      <!-- ✅ MODAL NOVO AGENDAMENTO (corrigido) -->
       <section
         id="modal-new"
         class="modal modal--new"
@@ -249,33 +248,69 @@
         data-modal="new"
         hidden
       >
-        <header class="modal__header">
-          <h2 id="modal-new-title" class="modal__title">Novo Agendamento</h2>
+        <header class="modal__header modal__header--new">
+          <h2 id="modal-new-title" class="modal__title modal__title--new">
+            <iconify-icon
+              icon="solar:pen-new-square-linear"
+              class="modal__title-icon"
+              aria-hidden="true"
+            ></iconify-icon>
+            Novo Agendamento
+          </h2>
 
           <button
-            class="modal__close"
+            class="modal__close modal__close--icon"
             type="button"
             data-action="close-all"
             aria-label="Fechar"
           >
-            x
+            <iconify-icon
+              icon="solar:close-circle-linear"
+              aria-hidden="true"
+            ></iconify-icon>
           </button>
         </header>
 
-        <div class="modal__body">
-          <form class="form" novalidate>
-            <fieldset class="form__field" data-field="petType">
+        <div class="modal__body modal__body--new">
+          <form class="form form--new" novalidate>
+            <fieldset class="form__field form__field--pet" data-field="petType">
               <legend class="form__label">Tipo</legend>
 
-              <label class="pet-type">
-                <input type="radio" name="petType" value="dog" checked />
-                <span>Cachorro</span>
-              </label>
+              <div class="form__pet-options">
+                <label class="pet-type pet-type--dog">
+                  <input
+                    type="radio"
+                    name="petType"
+                    value="dog"
+                    data-icon="mdi:dog"
+                  />
+                  <span class="pet-type__card">
+                    <iconify-icon
+                      icon="mdi:dog"
+                      class="pet-type__icon"
+                      aria-hidden="true"
+                    ></iconify-icon>
+                    <span class="pet-type__label">Cachorro</span>
+                  </span>
+                </label>
 
-              <label class="pet-type">
-                <input type="radio" name="petType" value="cat" />
-                <span>Gato</span>
-              </label>
+                <label class="pet-type pet-type--cat">
+                  <input
+                    type="radio"
+                    name="petType"
+                    value="cat"
+                    data-icon="solar:cat-linear"
+                  />
+                  <span class="pet-type__card">
+                    <iconify-icon
+                      icon="solar:cat-linear"
+                      class="pet-type__icon"
+                      aria-hidden="true"
+                    ></iconify-icon>
+                    <span class="pet-type__label">Gato</span>
+                  </span>
+                </label>
+              </div>
 
               <small
                 class="form__error"
@@ -301,36 +336,44 @@
             </div>
 
             <div class="form__field">
-              <label class="form__label" for="tutorName">Nome do Tutor</label>
+              <label class="form__label" for="ownerName">Nome do Tutor</label>
               <input
                 class="form__control input-dark"
-                id="tutorName"
-                name="tutorName"
+                id="ownerName"
+                name="ownerName"
                 type="text"
                 placeholder="Ex: Júnior Almeida"
               />
               <small
                 class="form__error"
-                data-error-for="tutorName"
+                data-error-for="ownerName"
                 aria-live="polite"
               ></small>
             </div>
 
             <div class="form__field">
               <label class="form__label" for="service">Serviço</label>
-              <select
-                class="form__control input-dark"
-                id="service"
-                name="service"
-              >
-                <option value="">Selecione o procedimento</option>
-                <option value="Banho">Banho</option>
-                <option value="Tosa Completa">Tosa Completa</option>
-                <option value="Tosa Higiênica">Tosa Higiênica</option>
-                <option value="Hidratação">Hidratação</option>
-                <option value="Corte de Unhas">Corte de Unhas</option>
-                <option value="Limpeza de Ouvido">Limpeza de Ouvido</option>
-              </select>
+              <div class="form__select">
+                <select
+                  class="form__control input-dark"
+                  id="service"
+                  name="service"
+                >
+                  <option value="">Selecione o procedimento</option>
+                  <option value="banho">Banho</option>
+                  <option value="tosa_completa">Tosa Completa</option>
+                  <option value="tosa_higienica">Tosa Higiênica</option>
+                  <option value="hidratacao">Hidratação</option>
+                  <option value="unhas">Corte de Unhas</option>
+                  <option value="ouvido">Limpeza de Ouvido</option>
+                </select>
+                <iconify-icon
+                  icon="solar:alt-arrow-down-linear"
+                  class="form__select-icon"
+                  aria-hidden="true"
+                ></iconify-icon>
+              </div>
+
               <small
                 class="form__error"
                 data-error-for="service"
@@ -370,8 +413,14 @@
               </div>
             </div>
 
-            <button class="btn btn--primary" type="submit">
-              Confirmar Agendamento
+            <button class="btn btn--primary form__submit" type="submit">
+              <iconify-icon
+                class="form__submit-icon"
+                aria-hidden="true"
+                data-submit-icon
+                hidden
+              ></iconify-icon>
+              <span>Confirmar Agendamento</span>
             </button>
           </form>
         </div>

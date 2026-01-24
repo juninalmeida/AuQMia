@@ -64,7 +64,7 @@ function renderCard(appt) {
 
   const sub = document.createElement("div");
   sub.className = "appt-card__sub";
-  sub.textContent = appt.tutorName;
+  sub.textContent = appt.ownerName;
 
   const svc = document.createElement("div");
   svc.className = "appt-card__svc";
@@ -113,10 +113,13 @@ export function initAppointments(store) {
   const form = modalNew?.querySelector("form.form");
   if (!form) return;
 
+  const submitIcon = form.querySelector("[data-submit-icon]");
+  const submitButton = form.querySelector(".form__submit");
+
   const FIELDS = [
     "petType",
     "petName",
-    "tutorName",
+    "ownerName",
     "service",
     "time",
     "dateISO",
@@ -187,8 +190,43 @@ export function initAppointments(store) {
     }
   }
 
+  function updateSubmitIcon() {
+    const selected = form.querySelector('input[name="petType"]:checked');
+    const icon = selected?.dataset?.icon;
+    const petType = selected?.value;
+
+    if (submitButton) {
+      submitButton.classList.remove(
+        "form__submit--dog",
+        "form__submit--cat",
+      );
+      if (petType === "dog") submitButton.classList.add("form__submit--dog");
+      if (petType === "cat") submitButton.classList.add("form__submit--cat");
+    }
+
+    if (!submitIcon) return;
+
+    if (!icon) {
+      submitIcon.hidden = true;
+      submitIcon.removeAttribute("icon");
+      return;
+    }
+
+    submitIcon.setAttribute("icon", icon);
+    submitIcon.hidden = false;
+  }
+
   render(store.getState());
   store.subscribe(render);
+
+  updateSubmitIcon();
+
+  form.addEventListener("change", (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLInputElement)) return;
+    if (target.name !== "petType") return;
+    updateSubmitIcon();
+  });
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -197,7 +235,7 @@ export function initAppointments(store) {
     const draft = {
       petType: String(fd.get("petType") || ""),
       petName: String(fd.get("petName") || ""),
-      tutorName: String(fd.get("tutorName") || ""),
+      ownerName: String(fd.get("ownerName") || ""),
       service: String(fd.get("service") || ""),
       time: String(fd.get("time") || ""),
       dateISO: String(
@@ -220,5 +258,6 @@ export function initAppointments(store) {
 
     dispatchAdd(appointment);
     form.reset();
+    updateSubmitIcon();
   });
 }
