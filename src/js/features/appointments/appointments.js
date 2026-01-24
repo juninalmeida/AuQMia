@@ -1,6 +1,8 @@
 import { makeId } from "../../../utils/ids.js";
 import { validateAppointment } from "../../../utils/validators.js";
 
+const API_BASE = "/api";
+
 function getPeriod(timeHHMM) {
   const [hh] = timeHHMM.split(":").map(Number);
   if (hh < 12) return "morning";
@@ -14,10 +16,10 @@ function sortByTime(a, b) {
 
 const SERVICE_META = {
   "bath-groom": { icon: "solar:bath-linear" },
-  "vet-consult": { icon: "solar:stethoscope-linear" },
+  "vet-consult": { icon: "mdi:stethoscope" },
   vaccination: { icon: "solar:syringe-linear" },
-  deworming: { icon: "solar:pill-linear" },
-  "flea-tick": { icon: "solar:bug-minimalistic-linear" },
+  deworming: { icon: "mdi:pill" },
+  "flea-tick": { icon: "mdi:bug" },
 };
 
 const serviceCatalog = {};
@@ -129,7 +131,7 @@ function renderCard(appt) {
   const editBtn = document.createElement("button");
   editBtn.type = "button";
   editBtn.className = "appt-card__action";
-  editBtn.setAttribute("aria-label", "Excluir");
+  editBtn.setAttribute("aria-label", "Delete");
   editBtn.dataset.action = "delete-appointment";
   editBtn.dataset.appointmentId = appt.id;
 
@@ -187,6 +189,7 @@ export function initAppointments(store) {
   const submitIcon = form.querySelector("[data-submit-icon]");
   const submitButton = form.querySelector(".form__submit");
   const serviceSelect = form.elements?.service;
+  const dateInputEl = form.elements?.dateISO;
   const notice = document.querySelector("[data-notice]");
   const noticeMessage = notice?.querySelector("[data-notice-message]");
   let noticeTimer = null;
@@ -257,13 +260,17 @@ export function initAppointments(store) {
     return messages.length ? messages.join(" • ") : "";
   }
 
+  async function fetchJson(url, options) {
+    const res = await fetch(url, options);
+    if (!res.ok) throw new Error("Request failed");
+    return res.json();
+  }
+
   async function loadServices() {
     if (!serviceSelect) return;
     serviceSelect.disabled = true;
     try {
-      const res = await fetch("/api/services");
-      if (!res.ok) throw new Error("Failed to load services");
-      const data = await res.json();
+      const data = await fetchJson(`${API_BASE}/services`);
       if (!Array.isArray(data)) throw new Error("Invalid services payload");
 
       Object.keys(serviceCatalog).forEach((key) => delete serviceCatalog[key]);
@@ -287,6 +294,34 @@ export function initAppointments(store) {
     } finally {
       serviceSelect.disabled = false;
     }
+  }
+
+  async function loadAppointments() {
+    try {
+      const data = await fetchJson(`${API_BASE}/appointments`);
+      if (!Array.isArray(data)) throw new Error("Invalid appointments payload");
+      store.update((prev) => ({
+        ...prev,
+        data: { ...prev.data, appointments: data },
+      }));
+    } catch (err) {
+      // keep in-memory data if API is unavailable
+    }
+  }
+
+  async function createAppointment(appointment) {
+    return fetchJson(`${API_BASE}/appointments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(appointment),
+    });
+  }
+
+  async function deleteAppointment(id) {
+    const res = await fetch(`${API_BASE}/appointments/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Failed to delete");
   }
 
   function setInvalid(field, isInvalid) {
@@ -330,8 +365,7 @@ export function initAppointments(store) {
         type: "ADD_APPOINTMENT",
         payload: { appointment },
       });
-      const withCalendar = updateCalendar(withAppt, appointment.dateISO);
-      return closeAllModals(withCalendar);
+      return closeAllModals(withAppt);
     });
   }
 
@@ -348,9 +382,8 @@ export function initAppointments(store) {
     renderDaily(state);
 
     if (state.ui.modals.newAppointmentOpen) {
-      const dateInput = form.elements?.dateISO;
-      if (dateInput && !dateInput.value) {
-        dateInput.value = state.ui.calendar.selectedDateISO;
+      if (dateInputEl && !dateInputEl.value) {
+        dateInputEl.value = state.ui.calendar.selectedDateISO;
       }
     }
   }
@@ -386,6 +419,14 @@ export function initAppointments(store) {
 
   updateSubmitIcon();
   loadServices();
+  loadAppointments();
+
+  if (dateInputEl) {
+    dateInputEl.addEventListener("change", () => {
+      if (!dateInputEl.value) return;
+      store.update((prev) => updateCalendar(prev, dateInputEl.value));
+    });
+  }
 
 
   form.addEventListener("change", (e) => {
@@ -395,7 +436,7 @@ export function initAppointments(store) {
     updateSubmitIcon();
   });
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const fd = new FormData(form);
@@ -440,12 +481,18 @@ export function initAppointments(store) {
 
     const appointment = { id: makeId(), ...draft };
 
-    dispatchAdd(appointment);
+    try {
+      const saved = await createAppointment(appointment);
+      dispatchAdd(saved);
+    } catch (err) {
+      showNotice("Unable to save appointment");
+      return;
+    }
     form.reset();
     updateSubmitIcon();
   });
 
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", async (e) => {
     const target = e.target;
     if (!(target instanceof HTMLElement)) return;
     const btn = target.closest('[data-action="delete-appointment"]');
@@ -455,5 +502,11 @@ export function initAppointments(store) {
     const id = btn.getAttribute("data-appointment-id");
     if (!id) return;
     dispatchRemove(id);
+    try {
+      await deleteAppointment(id);
+    } catch (err) {
+      showNotice("Unable to delete appointment");
+      loadAppointments();
+    }
   });
 }
