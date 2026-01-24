@@ -30,6 +30,44 @@ function initHeaderDate() {
   timeEl.textContent = formatPtBrDate(today);
 }
 
+function initLoader() {
+  const loader = document.getElementById("loader-screen");
+  const appContent = document.getElementById("app-content");
+  if (!loader || !appContent) return;
+
+  const duration = 2000;
+  const start = performance.now();
+  const progressBar = document.getElementById("loader-progress");
+  const percentText = document.getElementById("loader-percentage");
+  const catRunner = document.getElementById("cat-runner");
+  const dogRunner = document.getElementById("dog-runner");
+
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const percent = Math.floor(progress * 100);
+
+    if (percentText) percentText.textContent = `${percent}%`;
+    if (progressBar) progressBar.style.width = `${percent}%`;
+
+    if (catRunner) catRunner.style.left = `${15 + progress * 85}%`;
+    if (dogRunner) dogRunner.style.left = `${progress * 85}%`;
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+      return;
+    }
+
+    setTimeout(() => {
+      loader.classList.add("loader-hidden");
+      appContent.classList.add("loaded");
+      document.body.classList.remove("is-loading");
+    }, 400);
+  }
+
+  requestAnimationFrame(update);
+}
+
 function initParticlesBackground() {
   if (typeof window === "undefined") return;
   if (!window.particlesJS) return;
@@ -99,6 +137,7 @@ function initParticlesBackground() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  initLoader();
   initModals(store);
   initCalendar(store);
   initAppointments(store);

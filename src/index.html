@@ -21,10 +21,81 @@
     ></script>
   </head>
 
-  <body>
+  <body class="is-loading">
+    <div id="loader-screen" class="loader-screen" aria-hidden="true">
+      <div class="loader-bg" aria-hidden="true">
+        <div class="loader-bg__item bg-float-1 loader-bg__item--bone">
+          <iconify-icon
+            icon="solar:bone-linear"
+            class="loader-bg__icon"
+          ></iconify-icon>
+        </div>
+        <div class="loader-bg__item bg-float-2 loader-bg__item--bone-broken">
+          <iconify-icon
+            icon="solar:bone-broken-linear"
+            class="loader-bg__icon loader-bg__icon--lg"
+          ></iconify-icon>
+        </div>
+        <div class="loader-bg__item bg-float-3 loader-bg__item--cat">
+          <iconify-icon
+            icon="solar:cat-linear"
+            class="loader-bg__icon loader-bg__icon--xl"
+          ></iconify-icon>
+        </div>
+        <div class="loader-bg__item bg-float-1 loader-bg__item--paw">
+          <iconify-icon
+            icon="solar:paw-linear"
+            class="loader-bg__icon loader-bg__icon--lg"
+          ></iconify-icon>
+        </div>
+      </div>
+
+      <div class="loader-card">
+        <div class="loader-track">
+          <div id="cat-runner" class="runner runner--cat">
+            <div class="runner__motion running-motion">
+              <div class="runner__fx">
+                <span class="runner__line runner__line--long"></span>
+                <span class="runner__line runner__line--short"></span>
+              </div>
+              <iconify-icon
+                icon="solar:cat-bold-duotone"
+                class="runner__icon running-tilt runner__icon--cat"
+              ></iconify-icon>
+            </div>
+            <div class="runner__shadow runner__shadow--cat"></div>
+          </div>
+
+          <div id="dog-runner" class="runner runner--dog">
+            <div class="runner__motion running-motion runner__motion--dog">
+              <span class="runner__bark">WOOF!</span>
+              <iconify-icon
+                icon="solar:dog-bold-duotone"
+                class="runner__icon running-tilt runner__icon--dog"
+              ></iconify-icon>
+            </div>
+            <div class="runner__shadow runner__shadow--dog"></div>
+          </div>
+        </div>
+
+        <div class="loader-bar">
+          <div id="loader-progress" class="loader-bar__fill"></div>
+        </div>
+
+        <div class="loader-footer">
+          <div class="loader-brand">
+            <span class="loader-label">Carregando Agenda</span>
+            <span class="loader-title font-serif-premium">AuQMia</span>
+          </div>
+          <span id="loader-percentage" class="loader-percent">0%</span>
+        </div>
+      </div>
+    </div>
+
     <div id="particles-js" aria-hidden="true"></div>
 
-    <div class="container app">
+    <div id="app-content" class="app-content">
+      <div class="container app">
       <header class="app-header">
         <div class="app-header__brand">
           <div class="brand">
@@ -152,9 +223,9 @@
             <span>Ver Calendário Completo</span>
           </button>
       </main>
-    </div>
+      </div>
 
-    <div class="notice notice--error" data-notice hidden>
+      <div class="notice notice--error" data-notice hidden>
       <div class="notice__card" role="alert" aria-live="assertive">
         <iconify-icon
           icon="solar:danger-circle-linear"
@@ -166,9 +237,9 @@
           <p class="notice__message" data-notice-message></p>
         </div>
       </div>
-    </div>
+      </div>
 
-    <div class="overlay" data-overlay hidden>
+      <div class="overlay" data-overlay hidden>
       <div
         class="overlay__backdrop"
         data-action="close-all"
@@ -468,6 +539,7 @@
           </form>
         </div>
       </section>
+    </div>
     </div>
   </body>
 </html>
