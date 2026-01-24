@@ -47,6 +47,14 @@ module.exports = (env, argv) => {
       port: 3000,
       open: true,
       hot: true,
+      proxy: [
+        {
+          context: ["/api"],
+          target: "http://localhost:3001",
+          changeOrigin: true,
+          pathRewrite: { "^/api": "" },
+        },
+      ],
     },
     devtool: isProd ? "source-map" : "eval-source-map",
   };

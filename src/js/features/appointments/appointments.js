@@ -13,17 +13,18 @@ function sortByTime(a, b) {
 }
 
 const SERVICE_META = {
-  banho: { label: "Banho", icon: "solar:bath-linear" },
-  tosa_completa: { label: "Tosa Completa", icon: "solar:scissors-linear" },
-  tosa_higienica: { label: "Tosa Higiênica", icon: "solar:scissors-linear" },
-  hidratacao: { label: "Hidratação", icon: "solar:bath-linear" },
-  unhas: { label: "Corte de Unhas", icon: "solar:scissors-linear" },
-  ouvido: { label: "Limpeza de Ouvido", icon: "solar:syringe-linear" },
+  "bath-groom": { icon: "solar:bath-linear" },
+  "vet-consult": { icon: "solar:stethoscope-linear" },
+  vaccination: { icon: "solar:syringe-linear" },
+  deworming: { icon: "solar:pill-linear" },
+  "flea-tick": { icon: "solar:bug-minimalistic-linear" },
 };
 
-function getServiceMeta(service) {
-  if (SERVICE_META[service]) return SERVICE_META[service];
-  return { label: service, icon: "solar:scissors-linear" };
+const serviceCatalog = {};
+
+function getServiceMeta(serviceId) {
+  if (SERVICE_META[serviceId]) return SERVICE_META[serviceId];
+  return { icon: "solar:scissors-linear" };
 }
 
 function getCalendarFromISO(dateISO) {
@@ -117,7 +118,8 @@ function renderCard(appt) {
 
   const serviceLabel = document.createElement("span");
   serviceLabel.className = "appt-card__service-label";
-  serviceLabel.textContent = serviceMeta.label;
+  serviceLabel.textContent =
+    serviceCatalog[appt.service]?.label || appt.service || "Service";
 
   service.append(serviceIcon, serviceLabel);
 
@@ -184,6 +186,7 @@ export function initAppointments(store) {
 
   const submitIcon = form.querySelector("[data-submit-icon]");
   const submitButton = form.querySelector(".form__submit");
+  const serviceSelect = form.elements?.service;
   const notice = document.querySelector("[data-notice]");
   const noticeMessage = notice?.querySelector("[data-notice-message]");
   let noticeTimer = null;
@@ -252,6 +255,38 @@ export function initAppointments(store) {
   function formatNoticeMessage(errors) {
     const messages = Object.values(errors).filter(Boolean);
     return messages.length ? messages.join(" • ") : "";
+  }
+
+  async function loadServices() {
+    if (!serviceSelect) return;
+    serviceSelect.disabled = true;
+    try {
+      const res = await fetch("/api/services");
+      if (!res.ok) throw new Error("Failed to load services");
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error("Invalid services payload");
+
+      Object.keys(serviceCatalog).forEach((key) => delete serviceCatalog[key]);
+      const fragment = document.createDocumentFragment();
+      data.forEach((item) => {
+        if (!item || !item.id || !item.label) return;
+        serviceCatalog[item.id] = { label: item.label };
+        const opt = document.createElement("option");
+        opt.value = item.id;
+        opt.textContent = item.label;
+        fragment.appendChild(opt);
+      });
+
+      while (serviceSelect.options.length > 1) {
+        serviceSelect.remove(1);
+      }
+      serviceSelect.appendChild(fragment);
+      render(store.getState());
+    } catch (err) {
+      // keep fallback placeholder if API is unavailable
+    } finally {
+      serviceSelect.disabled = false;
+    }
   }
 
   function setInvalid(field, isInvalid) {
@@ -350,6 +385,7 @@ export function initAppointments(store) {
   store.subscribe(render);
 
   updateSubmitIcon();
+  loadServices();
 
 
   form.addEventListener("change", (e) => {

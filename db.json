@@ -1,0 +1,9 @@
+{
+  "services": [
+    { "id": "bath-groom", "label": "Banho e tosa" },
+    { "id": "vet-consult", "label": "Consulta veterinária" },
+    { "id": "vaccination", "label": "Vacinação" },
+    { "id": "deworming", "label": "Vermifugação" },
+    { "id": "flea-tick", "label": "Controle de pulgas e carrapatos" }
+  ]
+}
