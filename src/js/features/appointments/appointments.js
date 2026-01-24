@@ -1,7 +1,76 @@
 import { makeId } from "../../../utils/ids.js";
 import { validateAppointment } from "../../../utils/validators.js";
+import fallbackData from "../../../../db.json";
 
 const API_BASE = "/api";
+const IS_BROWSER = typeof window !== "undefined";
+const IS_LOCALHOST =
+  IS_BROWSER &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
+const USE_API = IS_LOCALHOST;
+
+const STORAGE_KEYS = {
+  services: "auqmia:services",
+  appointments: "auqmia:appointments",
+};
+
+function cloneList(list) {
+  if (!Array.isArray(list)) return [];
+  return list.map((item) =>
+    item && typeof item === "object" ? { ...item } : item,
+  );
+}
+
+function canUseStorage() {
+  if (!IS_BROWSER || !window.localStorage) return false;
+  try {
+    const key = "__auqmia_storage_test__";
+    window.localStorage.setItem(key, "1");
+    window.localStorage.removeItem(key);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+const STORAGE_AVAILABLE = canUseStorage();
+const FALLBACK_SERVICES = cloneList(fallbackData?.services);
+const FALLBACK_APPOINTMENTS = cloneList(fallbackData?.appointments);
+
+function readStoredArray(key, fallback) {
+  if (!STORAGE_AVAILABLE) return cloneList(fallback);
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) {
+      const seeded = cloneList(fallback);
+      window.localStorage.setItem(key, JSON.stringify(seeded));
+      return seeded;
+    }
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed;
+  } catch (err) {
+    // ignore storage errors
+  }
+  return cloneList(fallback);
+}
+
+function writeStoredArray(key, value) {
+  if (!STORAGE_AVAILABLE) return;
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (err) {
+    // ignore storage errors
+  }
+}
+
+const localData = {
+  services: readStoredArray(STORAGE_KEYS.services, FALLBACK_SERVICES),
+  appointments: readStoredArray(
+    STORAGE_KEYS.appointments,
+    FALLBACK_APPOINTMENTS,
+  ),
+};
 
 function getPeriod(timeHHMM) {
   const [hh] = timeHHMM.split(":").map(Number);
@@ -266,62 +335,107 @@ export function initAppointments(store) {
     return res.json();
   }
 
+  function applyServices(data) {
+    if (!serviceSelect || !Array.isArray(data)) return;
+
+    Object.keys(serviceCatalog).forEach((key) => delete serviceCatalog[key]);
+    const fragment = document.createDocumentFragment();
+    data.forEach((item) => {
+      if (!item || !item.id || !item.label) return;
+      serviceCatalog[item.id] = { label: item.label };
+      const opt = document.createElement("option");
+      opt.value = item.id;
+      opt.textContent = item.label;
+      fragment.appendChild(opt);
+    });
+
+    while (serviceSelect.options.length > 1) {
+      serviceSelect.remove(1);
+    }
+    serviceSelect.appendChild(fragment);
+    render(store.getState());
+  }
+
   async function loadServices() {
     if (!serviceSelect) return;
     serviceSelect.disabled = true;
     try {
-      const data = await fetchJson(`${API_BASE}/services`);
+      const data = USE_API
+        ? await fetchJson(`${API_BASE}/services`)
+        : localData.services;
       if (!Array.isArray(data)) throw new Error("Invalid services payload");
 
-      Object.keys(serviceCatalog).forEach((key) => delete serviceCatalog[key]);
-      const fragment = document.createDocumentFragment();
-      data.forEach((item) => {
-        if (!item || !item.id || !item.label) return;
-        serviceCatalog[item.id] = { label: item.label };
-        const opt = document.createElement("option");
-        opt.value = item.id;
-        opt.textContent = item.label;
-        fragment.appendChild(opt);
-      });
-
-      while (serviceSelect.options.length > 1) {
-        serviceSelect.remove(1);
+      if (!USE_API) {
+        localData.services = data;
+        writeStoredArray(STORAGE_KEYS.services, data);
       }
-      serviceSelect.appendChild(fragment);
-      render(store.getState());
+
+      applyServices(data);
     } catch (err) {
-      // keep fallback placeholder if API is unavailable
+      applyServices(localData.services);
     } finally {
       serviceSelect.disabled = false;
     }
   }
 
+  function applyAppointments(data) {
+    if (!Array.isArray(data)) return;
+    store.update((prev) => ({
+      ...prev,
+      data: { ...prev.data, appointments: data },
+    }));
+  }
+
   async function loadAppointments() {
     try {
-      const data = await fetchJson(`${API_BASE}/appointments`);
+      const data = USE_API
+        ? await fetchJson(`${API_BASE}/appointments`)
+        : localData.appointments;
       if (!Array.isArray(data)) throw new Error("Invalid appointments payload");
-      store.update((prev) => ({
-        ...prev,
-        data: { ...prev.data, appointments: data },
-      }));
+
+      if (!USE_API) {
+        localData.appointments = data;
+        writeStoredArray(STORAGE_KEYS.appointments, data);
+      }
+
+      applyAppointments(data);
     } catch (err) {
-      // keep in-memory data if API is unavailable
+      applyAppointments(localData.appointments);
     }
   }
 
   async function createAppointment(appointment) {
-    return fetchJson(`${API_BASE}/appointments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(appointment),
-    });
+    if (USE_API) {
+      return fetchJson(`${API_BASE}/appointments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(appointment),
+      });
+    }
+
+    const next = [...localData.appointments, appointment];
+    localData.appointments = next;
+    writeStoredArray(STORAGE_KEYS.appointments, next);
+    return appointment;
   }
 
   async function deleteAppointment(id) {
-    const res = await fetch(`${API_BASE}/appointments/${encodeURIComponent(id)}`, {
-      method: "DELETE",
-    });
-    if (!res.ok) throw new Error("Failed to delete");
+    if (USE_API) {
+      const res = await fetch(
+        `${API_BASE}/appointments/${encodeURIComponent(id)}`,
+        {
+          method: "DELETE",
+        },
+      );
+      if (!res.ok) throw new Error("Failed to delete");
+      return;
+    }
+
+    const next = localData.appointments.filter(
+      (appointment) => appointment.id !== id,
+    );
+    localData.appointments = next;
+    writeStoredArray(STORAGE_KEYS.appointments, next);
   }
 
   function setInvalid(field, isInvalid) {

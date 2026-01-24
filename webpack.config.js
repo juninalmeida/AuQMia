@@ -4,13 +4,15 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = (env, argv) => {
   const isProd = argv.mode === "production";
+  const outputPath = path.resolve(__dirname, isProd ? "docs" : "dist");
 
   return {
     entry: "./src/js/main.js",
     output: {
-      path: path.resolve(__dirname, "dist"),
+      path: outputPath,
       filename: isProd ? "bundle.[contenthash].js" : "bundle.js",
-      clean: true,
+      clean: isProd ? { keep: /STATUS\.md/ } : true,
+      publicPath: isProd ? "./" : "auto",
     },
     module: {
       rules: [
@@ -46,7 +48,7 @@ module.exports = (env, argv) => {
         : []),
     ],
     devServer: {
-      static: path.resolve(__dirname, "dist"),
+      static: outputPath,
       port: 3000,
       open: true,
       hot: true,

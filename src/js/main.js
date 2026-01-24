@@ -68,6 +68,18 @@ function initLoader() {
   requestAnimationFrame(update);
 }
 
+function preventFormReloads() {
+  document.addEventListener(
+    "submit",
+    (e) => {
+      const form = e.target?.closest?.("form");
+      if (!form || !form.classList?.contains("form")) return;
+      e.preventDefault();
+    },
+    true,
+  );
+}
+
 function initParticlesBackground() {
   if (typeof window === "undefined") return;
   if (!window.particlesJS) return;
@@ -137,6 +149,7 @@ function initParticlesBackground() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  preventFormReloads();
   initLoader();
   initModals(store);
   initCalendar(store);
